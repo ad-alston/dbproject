@@ -20,6 +20,8 @@ public class Index extends HttpServlet{
 			PrintWriter outStream = response.getWriter();
 			
 			outStream.println("Placeholder string.");
+			
+			outStream.close();
 	}
 }
 
