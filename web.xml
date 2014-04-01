@@ -1,0 +1,26 @@
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+
+	<servlet>
+		<servlet-name>
+			Index
+		</servlet-name>
+		<servlet-class>
+			Index
+        </servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>Index</servlet-name>
+		<url-pattern>/Index</url-pattern>
+	</servlet-mapping>
+	
+	<stdout-log>
+		<href>$app-dir/WEB-INF/log/resin-stdout.log</href>
+		<rollover-period>1D</rollover-period>
+		<timestamp>- </timestamp>
+	</stdout-log>
+
+</web-app>
