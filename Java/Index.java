@@ -1,6 +1,5 @@
 /**
- * Index.java - Splash:  displays index of available forums
- * plus a link to log in.
+ * Index.java - Splash:  displays index of available forums.
  */
 
 import java.io.*;
@@ -15,13 +14,41 @@ public class Index extends HttpServlet{
 						HttpServletResponse response) 
 				throws ServletException, IOException {
 			
-			response.setContentType("text/html");
+		response.setContentType("text/html");
+		PrintWriter outStream = response.getWriter();
+		
+		// Head contents
+		String title = HTMLFormatter.formatElement("title",null,"Board Index | DB Forum");
+		outStream.println(HTMLFormatter.formatElement("head",null,title));
+		
+		try{
+			// Connect, log in to Oracle DB
+			Connection connection = DBConnector.connect();
 			
-			PrintWriter outStream = response.getWriter();
+			// Query the DB
+			Statement s = connection.createStatement();
+			String query = "SELECT * FROM Boards";
+			ResultSet r = s.executeQuery(query);
 			
-			outStream.println("Placeholder string.");
+			// Format and send response in HTML Format
+			outStream.println(HTMLFormatter.formatElement("h1", null, "Boards:"));
 			
-			outStream.close();
+			while(r.next()){
+				String boardName = r.getString(1);
+				String[] htmlAttributes = { "href", "'/ViewBoard?name="+boardName+"'" };
+				outStream.println(
+					HTMLFormatter.formatElement("a",htmlAttributes, boardName));
+				outStream.println(HTMLFormatter.NEWLINE);
+			}
+			
+			// Close everything
+			DBConnector.close(r,s,connection);
+		} catch (Exception e){
+			outStream.println("Unable to access database.");
+			e.printStackTrace(outStream);
+		}
+		
+		outStream.close();
 	}
 }
 
