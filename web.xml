@@ -12,15 +12,22 @@
         </servlet-class>
 	</servlet>
 	
+	<servlet>
+		<servlet-name>
+			ViewBoard
+		</servlet-name>
+		<servlet-class>
+			ViewBoard
+        </servlet-class>
+	</servlet>
+	
 	<servlet-mapping>
 		<servlet-name>Index</servlet-name>
 		<url-pattern>/Index</url-pattern>
 	</servlet-mapping>
-	
-	<stdout-log>
-		<href>$app-dir/WEB-INF/log/resin-stdout.log</href>
-		<rollover-period>1D</rollover-period>
-		<timestamp>- </timestamp>
-	</stdout-log>
 
+	<servlet-mapping>
+		<servlet-name>ViewBoard</servlet-name>
+		<url-pattern>/ViewBoard</url-pattern>
+	</servlet-mapping>
 </web-app>
