@@ -31,7 +31,8 @@ public class Index extends HttpServlet{
 			ResultSet r = s.executeQuery(query);
 			
 			// Format and send response in HTML Format
-			outStream.println(HTMLFormatter.formatElement("h1", null, "Boards:"));
+			outStream.println(HTMLFormatter.formatElement("h1", null, "DB Forum"));
+			outStream.println(HTMLFormatter.formatElement("h2", null, "Board Index"));
 			
 			while(r.next()){
 				String boardName = r.getString(1);

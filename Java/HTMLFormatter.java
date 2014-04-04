@@ -1,6 +1,12 @@
+import java.util.regex.*;
+
 public class HTMLFormatter{
 
 	public static final String NEWLINE = "<br/>";
+	
+	/* Some useful Javascript String constants. */
+	public static final String INDEX_REDIRECT = 
+		"document.location.href = '/Index';";
 
 	/**
 	 * Formats an HTML element with a given set of

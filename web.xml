@@ -21,6 +21,15 @@
         </servlet-class>
 	</servlet>
 	
+	<servlet>
+		<servlet-name>
+			ViewThread
+		</servlet-name>
+		<servlet-class>
+			ViewThread
+        </servlet-class>
+	</servlet>
+	
 	<servlet-mapping>
 		<servlet-name>Index</servlet-name>
 		<url-pattern>/Index</url-pattern>
@@ -29,5 +38,10 @@
 	<servlet-mapping>
 		<servlet-name>ViewBoard</servlet-name>
 		<url-pattern>/ViewBoard</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ViewThread</servlet-name>
+		<url-pattern>/ViewThread</url-pattern>
 	</servlet-mapping>
 </web-app>

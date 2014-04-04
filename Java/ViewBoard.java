@@ -40,20 +40,26 @@ public class ViewBoard extends HttpServlet{
 			
 			// Query the DB
 			Statement s = connection.createStatement();
-			String query = "SELECT * FROM " + 
-						   "(SELECT A.tid, A.topic, A.time_created, COUNT(B.post_id) " +
-								"FROM (SELECT T.tid, T.topic, T.time_created "+
-										"FROM Threads T, Contains_Thread C "+
-										"WHERE T.tid = C.thread_id AND C.board_name='"+board+"') A, "+
-										"Contains_User_Post B " + 
-							"WHERE A.tid = B.thread_id "+
-							"GROUP BY A.tid, A.topic, A.time_created) Z " + 
-							"ORDER BY Z.time_created";
+			String query = "SELECT T2.tid, T2.topic, C2.username as author, T2.num_posts, TO_CHAR(U2.post_time,'Mon DD, YYYY HH24:MI') as last_post, C3.username as last_poster "+
+							"FROM "+
+								"(SELECT T1.tid, T1.topic, MAX(post_id) as last_pid, MIN(post_id) as auth_pid, COUNT(C1.post_id) as num_posts "+
+								"FROM "+
+									"(SELECT T.tid, T.topic "+
+									"FROM Threads T, Contains_Thread C "+
+									"WHERE T.tid = C.thread_id and C.board_name='"+board+"') T1, "+
+									"Contains_User_Post C1 "+
+								"WHERE C1.thread_id = T1.tid "+
+								"GROUP BY T1.tid, T1.topic) T2, "+
+								"UserPosts U1, UserPosts U2, Composed_Post C2, Composed_Post C3 "+
+							"WHERE U1.pid = T2.auth_pid and U1.pid = C2.pid and U2.pid = last_pid AND U2.pid = C3.pid "+
+							"ORDER BY U2.post_time DESC";
 			ResultSet r = s.executeQuery(query);
 			
 			// Format and send response in HTML Format
+			String[] indexAttrs = { "href", "/Index" };
 			outStream.println(HTMLFormatter.formatElement("h1", null, "DB Forum"));
-			outStream.println(HTMLFormatter.formatElement("h2", null, board));
+			outStream.println(HTMLFormatter.formatElement("h2", null, board + "["+
+								HTMLFormatter.formatElement("a", indexAttrs, "Index") +  "]"));
 			outStream.println(HTMLFormatter.formatElement("h3", null, "Active Threads"));
 			
 			// Create the column headings for post display
@@ -61,9 +67,10 @@ public class ViewBoard extends HttpServlet{
 			String[] subRowAttr = null;
 			String formattedThreads = 
 				HTMLFormatter.formatElement("tr",rowAttr,
-					HTMLFormatter.formatElement("td",null,"Thread") + 
+					HTMLFormatter.formatElement("td",null,"Topic") + 
+					HTMLFormatter.formatElement("td",null,"Author") + 
 					HTMLFormatter.formatElement("td",null,"Posts") + 
-					HTMLFormatter.formatElement("td",null,"Date Posted")
+					HTMLFormatter.formatElement("td",null,"Last Post")
 				);
 			
 			while(r.next()){
@@ -76,8 +83,10 @@ public class ViewBoard extends HttpServlet{
 				formattedThreads = formattedThreads + 
 					HTMLFormatter.formatElement("tr", subRowAttr,
 						HTMLFormatter.formatElement("td",null, thread_link) + 
-						HTMLFormatter.formatElement("td",null, r.getString(4)) + 
-						HTMLFormatter.formatElement("td",null, r.getString(3))
+						HTMLFormatter.formatElement("td",null, r.getString(3)) + 
+						HTMLFormatter.formatElement("td",null, r.getString(4)) +
+						HTMLFormatter.formatElement("td",null, r.getString(6) + 
+							" on " +r.getString(5))
 					);
 			}
 			
