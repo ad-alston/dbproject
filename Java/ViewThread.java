@@ -87,15 +87,37 @@ public class ViewThread extends HttpServlet{
 			while(r.next()){
 				String post_id = r.getString(2);
 				
-				String[] htmlAttributes = { "href", "/UserFeed?u="+r.getString(1) };
+				Statement s1 = connection.createStatement();
+				
+				query = "SELECT post_referenced_id FROM Post_References WHERE post_referencing_id = "+post_id;
+				ResultSet post_references = s1.executeQuery(query);
+				
+				String postReferences = "";
+				boolean hasRefs = false;
+				while(post_references.next() && post_references.getMetaData().getColumnCount() >= 1){
+					if(!hasRefs){
+						hasRefs = true;
+					} else{
+						postReferences = postReferences + ", ";
+					}
+					postReferences = postReferences + post_references.getString(1);
+				}
+				DBConnector.close(post_references,s1,null);
+				
+				if(hasRefs){
+					postReferences = "In response to: "+postReferences+HTMLFormatter.NEWLINE;
+				}
+				
+				String[] htmlAttributes = { "href", "/UserFeed?u="+r.getString(1).replace(" ","%20") };
 				String user_link = HTMLFormatter.formatElement(
-					"a", htmlAttributes, r.getString(1).replace(" ","%20") );
+					"a", htmlAttributes, r.getString(1) );
 					
 				formattedPosts = formattedPosts + 
 					HTMLFormatter.formatElement("tr", subRowAttr,
 						HTMLFormatter.formatElement("td",null, user_link) + 
-						HTMLFormatter.formatElement("td",null, r.getString(3) + 
+						HTMLFormatter.formatElement("td",null, "Post ID No. "+r.getString(2)+"&nbsp;&nbsp;&nbsp;"+r.getString(3) + 
 							HTMLFormatter.NEWLINE + 
+							postReferences + 
 							HTMLFormatter.NEWLINE +
 							r.getString(4))
 					);
