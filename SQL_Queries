@@ -1,0 +1,17 @@
+//get the posts a post references
+SELECT post_referenced_id FROM Post_References WHERE post_referencing_id = + "pr_id"
+
+//get the posts referencing a given post
+SELECT post_referencing_id FROM Post_References WHERE post_referenced_id = + "pr_id"
+
+//get the groups a user is in (by username)
+SELECT group_name FROM Users U, Is_In_Group G WHERE U.username = G.username AND G.username = + '"username"'
+
+//get all posts to a specific user feed
+Not sure what fpid is - its 1 in ever row in the table
+
+//get the number of posts made by a user
+SELECT COUNT(*) FROM Users U, Composed_Post C WHERE U.username = C.username AND U.username = + '"username"'
+
+//get the number of people in a group
+SELECT COUNT(*) FROM UserGroups U, Is_In_Group G WHERE U.name = G.group_name AND U.name = + '"groupName"'
