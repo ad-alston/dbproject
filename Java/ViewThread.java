@@ -81,7 +81,7 @@ public class ViewThread extends HttpServlet{
 			
 			// Create the column headings for post display
 			String[] rowAttr = null;
-			String[] subRowAttr = {"style","'background-color: #F2F2F2'"};
+			String[] subRowAttr = {"bgcolor","'#E6E6E6'"};
 			String formattedPosts = "";
 			
 			while(r.next()){
@@ -111,10 +111,10 @@ public class ViewThread extends HttpServlet{
 				String[] htmlAttributes = { "href", "/UserFeed?u="+r.getString(1).replace(" ","%20") };
 				String user_link = HTMLFormatter.formatElement(
 					"a", htmlAttributes, r.getString(1) );
-					
+				String[] ulinkAttr = { "valign", "\"top\"" };
 				formattedPosts = formattedPosts + 
 					HTMLFormatter.formatElement("tr", subRowAttr,
-						HTMLFormatter.formatElement("td",null, user_link) + 
+						HTMLFormatter.formatElement("td",ulinkAttr, user_link) + 
 						HTMLFormatter.formatElement("td",null, "Post ID No. "+r.getString(2)+"&nbsp;&nbsp;&nbsp;"+r.getString(3) + 
 							HTMLFormatter.NEWLINE + 
 							postReferences + 
@@ -124,7 +124,7 @@ public class ViewThread extends HttpServlet{
 			}
 			
 			// Send the formatted threads.
-			String[] tableAttrs = { "width", "'50%'" };
+			String[] tableAttrs = { "width", "'80%'" };
 			outStream.println(
 				HTMLFormatter.formatElement("table", tableAttrs, formattedPosts)
 			);

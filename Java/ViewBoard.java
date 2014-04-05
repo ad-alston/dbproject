@@ -91,7 +91,7 @@ public class ViewBoard extends HttpServlet{
 			}
 			
 			// Send the formatted threads.
-			String[] tableAttrs = { "width", "'50%'" };
+			String[] tableAttrs = { "width", "'80%'" };
 			outStream.println(
 				HTMLFormatter.formatElement("table", tableAttrs, formattedThreads)
 			);
